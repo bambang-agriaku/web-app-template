@@ -1,5 +1,12 @@
-import * as React from "react";
-import { env } from "./config/env";
+import { env } from "@/config/env";
+import {
+  createContext,
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+  type ReactNode,
+} from "react";
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -8,7 +15,7 @@ export interface AuthContext {
   user: string | null;
 }
 
-const AuthContext = React.createContext<AuthContext | null>(null);
+const AuthContext = createContext<AuthContext | null>(null);
 
 const key = `${env.APP_NAME}.${env.TARGET_ENV}`;
 
@@ -24,21 +31,21 @@ function setStoredUser(user: string | null) {
   }
 }
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<string | null>(getStoredUser());
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<string | null>(getStoredUser());
   const isAuthenticated = !!user;
 
-  const logout = React.useCallback(async () => {
+  const logout = useCallback(async () => {
     setStoredUser(null);
     setUser(null);
   }, []);
 
-  const login = React.useCallback(async (username: string) => {
+  const login = useCallback(async (username: string) => {
     setStoredUser(username);
     setUser(username);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setUser(getStoredUser());
   }, []);
 
@@ -50,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAuth() {
-  const context = React.useContext(AuthContext);
+  const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }

@@ -1,7 +1,7 @@
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import React from "react";
-import { useAuth } from "@/auth";
 import { fallback, Route } from "@/routes/login";
+import { useAuth } from "@/lib/auth";
 
 export const Login = () => {
   const auth = useAuth();

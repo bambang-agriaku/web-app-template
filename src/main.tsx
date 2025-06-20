@@ -9,7 +9,7 @@ import "./index.css";
 
 import { routeTree } from "./routeTree.gen";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { useAuth, AuthProvider } from "./auth";
+import { useAuth, AuthProvider } from "@/lib/auth";
 
 const router = createRouter({
   routeTree,
