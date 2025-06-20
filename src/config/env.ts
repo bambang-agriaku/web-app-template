@@ -11,8 +11,8 @@ const createEnv = () => {
     Record<string, string>
   >((acc, curr) => {
     const [key, value] = curr;
-    if (key.startsWith("VITE_APP_")) {
-      acc[key.replace("VITE_APP_", "")] = value;
+    if (key.startsWith("VITE_")) {
+      acc[key.replace("VITE_", "")] = value;
     }
     return acc;
   }, {});
