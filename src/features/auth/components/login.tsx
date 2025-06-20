@@ -1,5 +1,13 @@
-import { useRouter, useRouterState } from "@tanstack/react-router";
 import React from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
+import { useRouter, useRouterState } from "@tanstack/react-router";
 import { fallback, Route } from "@/routes/login";
 import { useAuth } from "@/lib/auth";
 
@@ -8,26 +16,25 @@ export const Login = () => {
   const router = useRouter();
   const isLoading = useRouterState({ select: (s) => s.isLoading });
   const navigate = Route.useNavigate();
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
   const search = Route.useSearch();
 
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const isLoggingIn = isLoading || isSubmitting;
+
   const onFormSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
     setIsSubmitting(true);
+
     try {
-      evt.preventDefault();
       const data = new FormData(evt.currentTarget);
-      const fieldValue = data.get("username");
+      const username = data.get("username")?.toString();
+      const password = data.get("password")?.toString();
 
-      if (!fieldValue) return;
-      const username = fieldValue.toString();
-      await auth.login(username);
+      if (!username || !password) return;
 
+      await auth.login(username); // You may want to pass password too if needed
       await router.invalidate();
-
-      // This is just a hack being used to wait for the auth state to update
-      // in a real app, you'd want to use a more robust solution
-
       await navigate({ to: search.redirect || fallback });
     } catch (error) {
       console.error("Error logging in: ", error);
@@ -36,39 +43,59 @@ export const Login = () => {
     }
   };
 
-  const isLoggingIn = isLoading || isSubmitting;
-
   return (
-    <div className="p-2 grid gap-2 place-items-center">
-      <h3 className="text-xl">Login page</h3>
+    <Box
+      display="grid"
+      justifyContent="center"
+      alignItems="center"
+      padding={2}
+      gap={2}
+    >
+      <Typography variant="h5">Login Page</Typography>
+
       {search.redirect ? (
-        <p className="text-red-500">You need to login to access this page.</p>
+        <Alert severity="warning">You need to login to access this page.</Alert>
       ) : (
-        <p>Login to see all the cool content in here.</p>
+        <Typography>Login to see all the cool content in here.</Typography>
       )}
-      <form className="mt-4 max-w-lg" onSubmit={onFormSubmit}>
-        <fieldset disabled={isLoggingIn} className="w-full grid gap-2">
-          <div className="grid gap-2 items-center min-w-[300px]">
-            <label htmlFor="username-input" className="text-sm font-medium">
-              Username
-            </label>
-            <input
+
+      <Box
+        component="form"
+        onSubmit={onFormSubmit}
+        sx={{ mt: 2, maxWidth: 400 }}
+      >
+        <fieldset disabled={isLoggingIn} style={{ border: "none", padding: 0 }}>
+          <Box display="grid" gap={2}>
+            <TextField
               id="username-input"
               name="username"
+              label="Username"
               placeholder="Enter your name"
-              type="text"
-              className="border rounded-md p-2 w-full"
+              fullWidth
               required
             />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md w-full disabled:bg-gray-300 disabled:text-gray-500"
-          >
-            {isLoggingIn ? "Loading..." : "Login"}
-          </button>
+            <TextField
+              id="password-input"
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+              type="password"
+              fullWidth
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={isLoggingIn}
+              startIcon={isLoggingIn ? <CircularProgress size={20} /> : null}
+            >
+              {isLoggingIn ? "Logging in..." : "Login"}
+            </Button>
+          </Box>
         </fieldset>
-      </form>
-    </div>
+      </Box>
+    </Box>
   );
 };

@@ -10,14 +10,18 @@ import "./index.css";
 import { routeTree } from "./routeTree.gen";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { useAuth, AuthProvider } from "@/lib/auth";
+import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
+
+const context = {
+  ...TanStackQueryProvider.getContext(),
+  auth: undefined!, // This will be set after we wrap the app in an AuthProvider
+};
 
 const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   scrollRestoration: true,
-  context: {
-    auth: undefined!,
-  },
+  context,
 });
 
 declare module "@tanstack/react-router" {
@@ -28,14 +32,17 @@ declare module "@tanstack/react-router" {
 
 function InnerApp() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
+
+  return <RouterProvider router={router} context={{ ...context, auth }} />;
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <InnerApp />
-    </AuthProvider>
+    <TanStackQueryProvider.Provider>
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
+    </TanStackQueryProvider.Provider>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Login } from "@mui/icons-material";
+import { Login } from "@/features/auth/components/login";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import z from "zod";
 
