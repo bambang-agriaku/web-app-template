@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "vite --port 3000",
+    "build:development": "vite build --mode development && tsc",
+    "build:staging": "vite build --mode staging && tsc",
+    "build:production": "vite build && tsc",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -18,7 +20,8 @@
     "@tanstack/react-router": "^1.121.27",
     "@tanstack/react-router-devtools": "^1.121.27",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
