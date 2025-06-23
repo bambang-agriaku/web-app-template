@@ -1,12 +1,5 @@
-import {
-  createFileRoute,
-  Link,
-  Outlet,
-  redirect,
-  useRouter,
-} from "@tanstack/react-router";
-import { useAuth } from "@/lib/auth";
-import { Button } from "@mui/material";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { AuthLayout } from "@/components/layout/auth-layout";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: ({ context, location }) => {
@@ -19,28 +12,13 @@ export const Route = createFileRoute("/_auth")({
       });
     }
   },
-  component: AuthLayout,
+  component: Auth,
 });
 
-function AuthLayout() {
-  const router = useRouter();
-  const navigate = Route.useNavigate();
-  const auth = useAuth();
-
-  const handleLogout = async () => {
-    await auth.logout();
-    await router.invalidate();
-    navigate({ to: "/login", replace: true });
-  };
-
+function Auth() {
   return (
-    <>
-      <div>
-        <Link to="/">Home</Link> <Link to="/about">About</Link>
-        <Button onClick={handleLogout}>Logout</Button>
-      </div>
-      <hr />
+    <AuthLayout>
       <Outlet />
-    </>
+    </AuthLayout>
   );
 }
