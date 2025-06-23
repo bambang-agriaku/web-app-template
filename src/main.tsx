@@ -3,7 +3,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { StrictMode } from "react";
+import { Fragment, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
@@ -11,6 +11,7 @@ import { routeTree } from "./routeTree.gen";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { useAuth, AuthProvider } from "@/lib/auth";
 import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
+import { CssBaseline } from "@mui/material";
 
 const context = {
   ...TanStackQueryProvider.getContext(),
@@ -38,11 +39,14 @@ function InnerApp() {
 
 function App() {
   return (
-    <TanStackQueryProvider.Provider>
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
-    </TanStackQueryProvider.Provider>
+    <Fragment>
+      <CssBaseline />
+      <TanStackQueryProvider.Provider>
+        <AuthProvider>
+          <InnerApp />
+        </AuthProvider>
+      </TanStackQueryProvider.Provider>
+    </Fragment>
   );
 }
 

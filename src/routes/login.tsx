@@ -2,7 +2,7 @@ import { Login } from "@/features/auth/components/login";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import z from "zod";
 
-export const fallback = "/about" as const;
+export const fallback = "/products" as const;
 
 export const Route = createFileRoute("/login")({
   component: Login,

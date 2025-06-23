@@ -1,5 +1,2 @@
-const Sidebar = () => {
-  return <div>sidebar</div>;
-};
-
-export { Sidebar };
+export * from "./sidebar";
+export * from "./list-item";

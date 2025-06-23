@@ -1,8 +1,9 @@
 import { useAuth } from "@/lib/auth";
 import { Route } from "@/routes/_auth";
-import { Button } from "@mui/material";
-import { useRouter, Link } from "@tanstack/react-router";
+import { Box } from "@mui/material";
+import { useRouter } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { Sidebar } from "@/components/ui/sidebar";
 
 type Props = {
   children: ReactNode;
@@ -20,13 +21,14 @@ export const AuthLayout = ({ children }: Props) => {
   };
 
   return (
-    <>
-      <div>
-        <Link to="/products">Products</Link> <Link to="/recipes">Recipes</Link>
-        <Button onClick={handleLogout}>Logout</Button>
-      </div>
-      <hr />
-      {children}
-    </>
+    <Box sx={{ display: "flex" }}>
+      <Sidebar />
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, bgcolor: "background.default", p: 5 }}
+      >
+        {children}
+      </Box>
+    </Box>
   );
 };
