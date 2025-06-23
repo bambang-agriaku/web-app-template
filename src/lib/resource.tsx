@@ -17,6 +17,14 @@ export const resources: Resource[] = [
     icon: <CategoryIcon />,
     label: "Produk",
     path: "/products",
+    children: [
+      {
+        name: "recipes",
+        icon: <CategoryIcon />,
+        label: "Resep",
+        path: "/recipes",
+      },
+    ],
   },
   {
     name: "recipes",

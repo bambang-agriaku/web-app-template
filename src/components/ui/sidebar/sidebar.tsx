@@ -1,5 +1,4 @@
 import { Toolbar, Drawer, Divider, List } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { ListItem } from "@/components/ui/sidebar";
 import { resources } from "@/lib/resource";
 
