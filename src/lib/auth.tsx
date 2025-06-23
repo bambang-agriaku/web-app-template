@@ -8,14 +8,19 @@ import {
   type ReactNode,
 } from "react";
 
-export interface AuthContext {
+type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+export type AuthContextType = {
   isAuthenticated: boolean;
-  login: (username: string) => Promise<void>;
+  login: (request: LoginRequest) => Promise<void>;
   logout: () => Promise<void>;
   user: string | null;
-}
+};
 
-const AuthContext = createContext<AuthContext | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 const key = `${env.APP_NAME}.${env.TARGET_ENV}`;
 
@@ -40,7 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
-  const login = useCallback(async (username: string) => {
+  const login = useCallback(async (request: LoginRequest) => {
+    const { username, password } = request;
+
+    console.log({ username, password });
     setStoredUser(username);
     setUser(username);
   }, []);

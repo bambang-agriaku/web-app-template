@@ -1,9 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { fallback } from "./login";
 
 export const Route = createFileRoute("/")({
-  component: RouteComponent,
+  beforeLoad: () => {
+    redirect({ to: fallback });
+  },
 });
-
-function RouteComponent() {
-  return <div>Hello "/"!</div>;
-}

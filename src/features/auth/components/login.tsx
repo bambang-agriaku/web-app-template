@@ -33,7 +33,7 @@ export const Login = () => {
 
       if (!username || !password) return;
 
-      await auth.login(username); // You may want to pass password too if needed
+      await auth.login({ username, password });
       await router.invalidate();
       await navigate({ to: search.redirect || fallback });
     } catch (error) {
