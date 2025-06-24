@@ -6,12 +6,16 @@ import {
   TextField,
   Typography,
   Alert,
+  Grid,
+  useTheme,
 } from "@mui/material";
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import { fallback, Route } from "@/routes/login";
 import { useAuth } from "@/lib/auth";
+import { env } from "@/config/env";
 
 export const Login = () => {
+  const theme = useTheme();
   const auth = useAuth();
   const router = useRouter();
   const isLoading = useRouterState({ select: (s) => s.isLoading });
@@ -44,58 +48,67 @@ export const Login = () => {
   };
 
   return (
-    <Box
-      display="grid"
-      justifyContent="center"
-      alignItems="center"
-      padding={2}
-      gap={2}
-    >
-      <Typography variant="h5">Login Page</Typography>
-
-      {search.redirect ? (
-        <Alert severity="warning">You need to login to access this page.</Alert>
-      ) : (
-        <Typography>Login to see all the cool content in here.</Typography>
-      )}
-
-      <Box
-        component="form"
-        onSubmit={onFormSubmit}
-        sx={{ mt: 2, maxWidth: 400 }}
+    <Grid container sx={{ height: "100vh" }}>
+      <Grid
+        size={{ xs: 0, md: 3 }}
+        sx={{ backgroundColor: theme.palette.primary.main }}
+      />
+      <Grid
+        size={{ xs: 12, md: 9 }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          p: 4,
+        }}
       >
-        <fieldset disabled={isLoggingIn} style={{ border: "none", padding: 0 }}>
-          <Box display="grid" gap={2}>
-            <TextField
-              id="username-input"
-              name="username"
-              label="Username"
-              placeholder="Enter your name"
-              fullWidth
-              required
-            />
-            <TextField
-              id="password-input"
-              name="password"
-              label="Password"
-              placeholder="Enter your password"
-              type="password"
-              fullWidth
-              required
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={isLoggingIn}
-              startIcon={isLoggingIn ? <CircularProgress size={20} /> : null}
-            >
-              {isLoggingIn ? "Logging in..." : "Login"}
-            </Button>
-          </Box>
-        </fieldset>
-      </Box>
-    </Box>
+        <Typography variant="header">{`Masuk Ke ${env.APP_NAME}`}</Typography>
+        {search.redirect && (
+          <Alert severity="warning">
+            You need to login to access this page.
+          </Alert>
+        )}
+        <Box
+          component="form"
+          onSubmit={onFormSubmit}
+          sx={{ mt: 2, maxWidth: 400 }}
+        >
+          <fieldset
+            disabled={isLoggingIn}
+            style={{ border: "none", padding: 0 }}
+          >
+            <Box display="grid" gap={2}>
+              <TextField
+                id="username-input"
+                name="username"
+                label="Username"
+                placeholder="Enter your name"
+                fullWidth
+                required
+              />
+              <TextField
+                id="password-input"
+                name="password"
+                label="Password"
+                placeholder="Enter your password"
+                type="password"
+                fullWidth
+                required
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={isLoggingIn}
+                startIcon={isLoggingIn ? <CircularProgress size={20} /> : null}
+              >
+                {isLoggingIn ? "Logging in..." : "Login"}
+              </Button>
+            </Box>
+          </fieldset>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
