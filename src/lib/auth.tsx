@@ -1,4 +1,7 @@
 import { env } from "@/config/env";
+import { useLogin } from "@/features/auth/api/login";
+import { fallback } from "@/routes/login";
+import type { LoginResponse } from "@/types/api";
 import {
   createContext,
   useState,
@@ -8,15 +11,10 @@ import {
   type ReactNode,
 } from "react";
 
-type LoginRequest = {
-  username: string;
-  password: string;
-};
-
 export type AuthContextType = {
   isAuthenticated: boolean;
-  login: (request: LoginRequest) => Promise<void>;
-  logout: () => Promise<void>;
+  login: ReturnType<typeof useLogin>;
+  logout: () => void;
   user: string | null;
 };
 
@@ -39,18 +37,28 @@ function setStoredUser(user: string | null) {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<string | null>(getStoredUser());
   const isAuthenticated = !!user;
+  const searchParams = new URLSearchParams();
+
+  const onLoginSuccess = async (response: LoginResponse) => {
+    setStoredUser(response.username);
+    setUser(response.username);
+
+    const redirect = searchParams.has("redirect")
+      ? searchParams.get("redirect")!
+      : fallback;
+
+    window.location.href = redirect;
+  };
+
+  const login = useLogin({
+    mutationConfig: {
+      onSuccess: onLoginSuccess,
+    },
+  });
 
   const logout = useCallback(async () => {
     setStoredUser(null);
     setUser(null);
-  }, []);
-
-  const login = useCallback(async (request: LoginRequest) => {
-    const { username, password } = request;
-
-    console.log({ username, password });
-    setStoredUser(username);
-    setUser(username);
   }, []);
 
   useEffect(() => {

@@ -9,17 +9,16 @@ import {
   Grid,
   useTheme,
 } from "@mui/material";
-import { useRouter, useRouterState } from "@tanstack/react-router";
-import { fallback, Route } from "@/routes/login";
+import { useRouterState } from "@tanstack/react-router";
+import { Route } from "@/routes/login";
 import { useAuth } from "@/lib/auth";
 import { env } from "@/config/env";
 
 export const Login = () => {
   const theme = useTheme();
   const auth = useAuth();
-  const router = useRouter();
+  const { mutate: login } = auth.login;
   const isLoading = useRouterState({ select: (s) => s.isLoading });
-  const navigate = Route.useNavigate();
   const search = Route.useSearch();
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -30,21 +29,20 @@ export const Login = () => {
     evt.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      const data = new FormData(evt.currentTarget);
-      const username = data.get("username")?.toString();
-      const password = data.get("password")?.toString();
+    const data = new FormData(evt.currentTarget);
+    const username = data.get("username")?.toString();
+    const password = data.get("password")?.toString();
 
-      if (!username || !password) return;
+    if (!username || !password) return;
 
-      await auth.login({ username, password });
-      await router.invalidate();
-      await navigate({ to: search.redirect || fallback });
-    } catch (error) {
-      console.error("Error logging in: ", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    login(
+      { data: { username, password } },
+      {
+        onSettled: () => {
+          setIsSubmitting(false);
+        },
+      },
+    );
   };
 
   return (

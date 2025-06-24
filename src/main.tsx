@@ -10,6 +10,7 @@ import { useAuth, AuthProvider } from "@/lib/auth";
 import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "@/config/theme.ts";
+import { Notifications } from "@/components/ui/notifications/notifications.tsx";
 
 const context = {
   ...TanStackQueryProvider.getContext(),
@@ -32,7 +33,12 @@ declare module "@tanstack/react-router" {
 function InnerApp() {
   const auth = useAuth();
 
-  return <RouterProvider router={router} context={{ ...context, auth }} />;
+  return (
+    <>
+      <RouterProvider router={router} context={{ ...context, auth }} />
+      <Notifications />
+    </>
+  );
 }
 
 function App() {
