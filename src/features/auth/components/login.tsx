@@ -62,7 +62,7 @@ export const Login = () => {
       >
         <Typography variant="header">{`Masuk Ke ${env.APP_NAME}`}</Typography>
         {search.redirect && (
-          <Alert severity="warning">
+          <Alert severity="warning" sx={{ mt: 2, maxWidth: 400 }}>
             You need to login to access this page.
           </Alert>
         )}

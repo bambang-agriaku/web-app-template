@@ -20,13 +20,13 @@ export type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const key = `${env.APP_NAME}.${env.TARGET_ENV}`;
+export const key = `${env.APP_NAME}.${env.TARGET_ENV}`;
 
 function getStoredUser() {
   return localStorage.getItem(key);
 }
 
-function setStoredUser(user: string | null) {
+export function setStoredUser(user: string | null) {
   if (user) {
     localStorage.setItem(key, user);
   } else {
@@ -40,8 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const searchParams = new URLSearchParams();
 
   const onLoginSuccess = async (response: LoginResponse) => {
-    setStoredUser(response.username);
-    setUser(response.username);
+    setStoredUser(response.accessToken);
+    setUser(response.accessToken);
 
     const redirect = searchParams.has("redirect")
       ? searchParams.get("redirect")!
