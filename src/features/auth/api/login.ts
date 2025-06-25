@@ -4,6 +4,7 @@ import { z } from "zod";
 import { api } from "@/lib/api-client";
 import type { MutationConfig } from "@/lib/react-query";
 import type { LoginResponse } from "@/types/api";
+import { apiRoutes } from "@/config/api-routes";
 
 export const loginSchema = z.object({
   username: z.string().min(1, "Required"),
@@ -17,7 +18,7 @@ export const login = ({
 }: {
   data: LoginInput;
 }): Promise<LoginResponse> => {
-  return api.post(`/auth/login`, data);
+  return api.post(apiRoutes.auth.login, data);
 };
 
 type UseLoginOptions = {

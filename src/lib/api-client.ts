@@ -3,13 +3,15 @@ import type { InternalAxiosRequestConfig } from "axios";
 import { useNotifications } from "@/components/ui/notifications";
 import { env } from "@/config/env";
 import { key, setStoredUser } from "./auth";
+import { apiRoutes } from "@/config/api-routes";
+import { paths } from "@/config/paths";
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
     config.headers.Accept = "application/json";
 
     const token = localStorage.getItem(key);
-    const isLoginRequest = config.url?.includes("/auth/login");
+    const isLoginRequest = config.url?.includes(apiRoutes.auth.login);
 
     if (token && !isLoginRequest) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -43,7 +45,7 @@ api.interceptors.response.use(
 
       const searchParams = new URLSearchParams();
       const redirect = searchParams.get("redirect") || window.location.pathname;
-      window.location.href = `/login?redirect=${redirect}`;
+      window.location.href = paths.auth.login.getHref(redirect);
     }
 
     return Promise.reject(error);

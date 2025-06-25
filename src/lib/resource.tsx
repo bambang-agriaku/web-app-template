@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import CategoryIcon from "@mui/icons-material/Category";
+import { paths } from "@/config/paths";
 
-type ResourceName = "products" | "recipes";
+type ResourceName = "products" | "cookings" | "recipes";
 
 export type Resource = {
   name: ResourceName;
@@ -13,23 +14,22 @@ export type Resource = {
 
 export const resources: Resource[] = [
   {
-    name: "products",
+    name: "cookings",
     icon: <CategoryIcon />,
-    label: "Produk",
-    path: "/products",
+    label: "Masak-memasak",
     children: [
       {
         name: "recipes",
         icon: <CategoryIcon />,
         label: "Resep",
-        path: "/recipes",
+        path: paths.recipes.list.path,
       },
     ],
   },
   {
-    name: "recipes",
+    name: "products",
     icon: <CategoryIcon />,
-    label: "Resep",
-    path: "/recipes",
+    label: "Produk",
+    path: paths.products.list.path,
   },
 ];

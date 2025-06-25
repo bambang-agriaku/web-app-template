@@ -3,9 +3,10 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 import type { QueryConfig } from "@/lib/react-query";
 import type { UserResponse } from "@/types/api";
+import { apiRoutes } from "@/config/api-routes";
 
 export const getUser = (): Promise<UserResponse> => {
-  return api.get(`/auth/me`);
+  return api.get(apiRoutes.auth.me);
 };
 
 export const getUserQueryOptions = () => {

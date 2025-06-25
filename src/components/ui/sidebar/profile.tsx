@@ -10,6 +10,7 @@ import {
 import { useRouter, useNavigate } from "@tanstack/react-router";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useUser } from "@/features/auth/api/me";
+import { paths } from "@/config/paths";
 
 const Profile = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const Profile = () => {
   const handleLogout = async () => {
     auth.logout();
     await router.invalidate();
-    navigate({ to: "/login", replace: true });
+    navigate({ to: paths.auth.login.path, replace: true });
   };
 
   return (

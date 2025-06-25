@@ -1,16 +1,21 @@
 export const paths = {
   auth: {
     login: {
-      path: "/auth/login",
-      getHref: () => "/auth/login",
-    },
-    me: {
-      path: "/auth/me",
-      getHref: () => "/auth/me",
-    },
-    refresh: {
-      path: "/auth/refresh",
-      getHref: () => "/auth/refresh",
+      path: "/login",
+      getHref: (redirect?: string) =>
+        `/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`,
     },
   },
-};
+  products: {
+    list: {
+      path: "/products",
+      getHref: () => "/products",
+    },
+  },
+  recipes: {
+    list: {
+      path: "/recipes",
+      getHref: () => "/recipes",
+    },
+  },
+} as const;
