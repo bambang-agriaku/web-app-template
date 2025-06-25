@@ -1,6 +1,6 @@
 import "@fontsource-variable/inter"; // Supports weights 100-900
 
-import { Fragment, StrictMode } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
@@ -11,6 +11,7 @@ import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provi
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "@/config/theme.ts";
 import { Notifications } from "@/components/ui/notifications/notifications.tsx";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 const context = {
   ...TanStackQueryProvider.getContext(),
@@ -43,7 +44,7 @@ function InnerApp() {
 
 function App() {
   return (
-    <Fragment>
+    <NuqsAdapter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <TanStackQueryProvider.Provider>
@@ -52,7 +53,7 @@ function App() {
           </AuthProvider>
         </TanStackQueryProvider.Provider>
       </ThemeProvider>
-    </Fragment>
+    </NuqsAdapter>
   );
 }
 

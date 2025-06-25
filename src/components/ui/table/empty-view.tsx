@@ -1,6 +1,6 @@
 import { black } from "@/config/colors";
 import { Stack, Typography } from "@mui/material";
-import EmptyDatagrid from "@public/images/empty_datagrid.svg";
+import EmptyDatagrid from "@/public/images/empty_datagrid.svg";
 
 const DEFAULT_HEIGHT = "500px";
 const DEFAULT_LABEL = "Data yang kamu cari tidak ada";

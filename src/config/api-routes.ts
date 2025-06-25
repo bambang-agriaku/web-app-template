@@ -3,4 +3,5 @@ export const apiRoutes = {
     login: "/auth/login",
     me: "/auth/me",
   },
+  products: "/products",
 } as const;
