@@ -8,8 +8,8 @@ import {
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useState, type ReactNode } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 
 type Props = {
   resource: Resource;
@@ -35,8 +35,23 @@ const ParentItem = ({
   icon: ReactNode;
   childrenItems: Resource[];
 }) => {
-  const [open, setOpen] = useState(false);
-  const toggle = () => setOpen(!open);
+  const location = useRouterState({ select: (s) => s.location.pathname });
+
+  const isChildPathMatch = useMemo(() => {
+    return childrenItems.some(
+      (child) => child.path && location.startsWith(child.path),
+    );
+  }, [childrenItems, location]);
+
+  const [open, setOpen] = useState(isChildPathMatch);
+
+  useEffect(() => {
+    if (isChildPathMatch) {
+      setOpen(true);
+    }
+  }, [isChildPathMatch]);
+
+  const toggle = () => setOpen((prev) => !prev);
 
   return (
     <>
@@ -64,13 +79,19 @@ const ChildItem = ({
   path?: string;
 }) => {
   const navigate = useNavigate();
+  const location = useRouterState({ select: (s) => s.location.pathname });
+
   const handleClick = () => {
-    navigate({ to: path });
+    if (path) {
+      navigate({ to: path });
+    }
   };
+
+  const isSelected = path === location;
 
   return (
     <MUIListItem component="div" disablePadding>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} selected={isSelected}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={label} />
       </ListItemButton>
