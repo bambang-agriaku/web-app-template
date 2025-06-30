@@ -9,12 +9,14 @@ import { DefaultPage, DefaultPageSize } from "@/config/table";
 export const getProducts = (
   page = DefaultPage,
   limit = DefaultPageSize,
+  q?: string,
 ): Promise<Products> => {
   const skip = page ? (page - 1) * limit : undefined;
   return api.get(apiRoutes.products, {
     params: {
       limit,
       skip,
+      ...(q && { q }),
     },
   });
 };
@@ -22,26 +24,29 @@ export const getProducts = (
 export const getProductsQueryOptions = ({
   page = DefaultPage,
   limit = DefaultPageSize,
-}: { page?: number; limit?: number } = {}) => {
+  query,
+}: { page?: number; limit?: number; query?: string } = {}) => {
   return queryOptions({
-    queryKey: ["products", { page, limit }],
-    queryFn: () => getProducts(page, limit),
+    queryKey: ["products", { page, limit, query }],
+    queryFn: () => getProducts(page, limit, query),
   });
 };
 
 type UseProductsOptions = {
   page?: number;
   limit?: number;
+  query?: string;
   queryConfig?: QueryConfig<typeof getProductsQueryOptions>;
 };
 
 export const useProducts = ({
-  queryConfig,
   page,
   limit,
+  query,
+  queryConfig,
 }: UseProductsOptions) => {
   return useQuery({
-    ...getProductsQueryOptions({ page, limit }),
+    ...getProductsQueryOptions({ page, limit, query }),
     ...queryConfig,
   });
 };

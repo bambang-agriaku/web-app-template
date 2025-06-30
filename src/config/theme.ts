@@ -9,6 +9,7 @@ export const theme = createTheme({
       dark: "#540068",
       contrastText: "#fff",
     },
+    neutral: "#ECF1F9",
   },
   typography: {
     fontFamily: '"Inter Variable", sans-serif',
@@ -163,6 +164,14 @@ declare module "@mui/material/styles" {
     buttonL?: React.CSSProperties;
     buttonM?: React.CSSProperties;
     buttonS?: React.CSSProperties;
+  }
+
+  interface Palette {
+    neutral: string;
+  }
+
+  interface PaletteOptions {
+    neutral: string;
   }
 }
 

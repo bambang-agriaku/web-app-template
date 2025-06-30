@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { useProducts } from "@/features/products/api/get-products";
 import { getDefaultMRTOptions } from "@/lib/table";
 import type { Product } from "@/types/api";
+import { useListQueryParams } from "../hooks/use-list-query-params";
 
 type Row = Product;
 
@@ -15,9 +16,11 @@ const defaultMRTOptions = getDefaultMRTOptions<Row>();
 
 export const Table = () => {
   const { pagination, onPaginationChange } = useTable();
+  const { queryParams } = useListQueryParams();
   const productsQuery = useProducts({
     page: pagination.pageIndex,
     limit: pagination.pageSize,
+    query: queryParams.q,
   });
 
   const rows = productsQuery.data?.products || [];
