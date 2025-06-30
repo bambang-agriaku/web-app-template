@@ -15,7 +15,10 @@ const defaultMRTOptions = getDefaultMRTOptions<Row>();
 
 export const Table = () => {
   const { pagination, onPaginationChange } = useTable();
-  const productsQuery = useProducts({ page: pagination.pageIndex });
+  const productsQuery = useProducts({
+    page: pagination.pageIndex,
+    limit: pagination.pageSize,
+  });
 
   const rows = productsQuery.data?.products || [];
   const rowCount = productsQuery.data?.total || 0;

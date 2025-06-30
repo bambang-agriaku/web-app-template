@@ -4,33 +4,44 @@ import { api } from "@/lib/api-client";
 import type { QueryConfig } from "@/lib/react-query";
 import type { Products } from "@/types/api";
 import { apiRoutes } from "@/config/api-routes";
-import { DefaultPage } from "@/config/table";
+import { DefaultPage, DefaultPageSize } from "@/config/table";
 
-export const getProducts = (page = DefaultPage): Promise<Products> => {
+export const getProducts = (
+  page = DefaultPage,
+  limit = DefaultPageSize,
+): Promise<Products> => {
+  const skip = page ? (page - 1) * limit : undefined;
   return api.get(apiRoutes.products, {
     params: {
-      page,
+      limit,
+      skip,
     },
   });
 };
 
 export const getProductsQueryOptions = ({
   page = DefaultPage,
-}: { page?: number } = {}) => {
+  limit = DefaultPageSize,
+}: { page?: number; limit?: number } = {}) => {
   return queryOptions({
-    queryKey: ["products", { page }],
-    queryFn: () => getProducts(page),
+    queryKey: ["products", { page, limit }],
+    queryFn: () => getProducts(page, limit),
   });
 };
 
 type UseProductsOptions = {
   page?: number;
+  limit?: number;
   queryConfig?: QueryConfig<typeof getProductsQueryOptions>;
 };
 
-export const useProducts = ({ queryConfig, page }: UseProductsOptions) => {
+export const useProducts = ({
+  queryConfig,
+  page,
+  limit,
+}: UseProductsOptions) => {
   return useQuery({
-    ...getProductsQueryOptions({ page }),
+    ...getProductsQueryOptions({ page, limit }),
     ...queryConfig,
   });
 };
