@@ -2,6 +2,10 @@
   "name": "web-app-template",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
