@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthRecipesRouteImport } from './routes/_auth.recipes'
-import { Route as AuthProductsRouteImport } from './routes/_auth.products'
+import { Route as AuthRecipesIndexRouteImport } from './routes/_auth/recipes/index'
+import { Route as AuthProductsIndexRouteImport } from './routes/_auth/products/index'
+import { Route as AuthProductsCreateRouteImport } from './routes/_auth/products/create'
+import { Route as AuthProductsProductIdEditRouteImport } from './routes/_auth/products/$productId.edit'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -29,49 +31,80 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRecipesRoute = AuthRecipesRouteImport.update({
-  id: '/recipes',
-  path: '/recipes',
+const AuthRecipesIndexRoute = AuthRecipesIndexRouteImport.update({
+  id: '/recipes/',
+  path: '/recipes/',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthProductsRoute = AuthProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
+const AuthProductsIndexRoute = AuthProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthProductsCreateRoute = AuthProductsCreateRouteImport.update({
+  id: '/products/create',
+  path: '/products/create',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthProductsProductIdEditRoute =
+  AuthProductsProductIdEditRouteImport.update({
+    id: '/products/$productId/edit',
+    path: '/products/$productId/edit',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/products': typeof AuthProductsRoute
-  '/recipes': typeof AuthRecipesRoute
+  '/products/create': typeof AuthProductsCreateRoute
+  '/products': typeof AuthProductsIndexRoute
+  '/recipes': typeof AuthRecipesIndexRoute
+  '/products/$productId/edit': typeof AuthProductsProductIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/products': typeof AuthProductsRoute
-  '/recipes': typeof AuthRecipesRoute
+  '/products/create': typeof AuthProductsCreateRoute
+  '/products': typeof AuthProductsIndexRoute
+  '/recipes': typeof AuthRecipesIndexRoute
+  '/products/$productId/edit': typeof AuthProductsProductIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/_auth/products': typeof AuthProductsRoute
-  '/_auth/recipes': typeof AuthRecipesRoute
+  '/_auth/products/create': typeof AuthProductsCreateRoute
+  '/_auth/products/': typeof AuthProductsIndexRoute
+  '/_auth/recipes/': typeof AuthRecipesIndexRoute
+  '/_auth/products/$productId/edit': typeof AuthProductsProductIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/products' | '/recipes'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/products/create'
+    | '/products'
+    | '/recipes'
+    | '/products/$productId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/products' | '/recipes'
+  to:
+    | '/'
+    | '/login'
+    | '/products/create'
+    | '/products'
+    | '/recipes'
+    | '/products/$productId/edit'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/login'
-    | '/_auth/products'
-    | '/_auth/recipes'
+    | '/_auth/products/create'
+    | '/_auth/products/'
+    | '/_auth/recipes/'
+    | '/_auth/products/$productId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -103,31 +136,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/recipes': {
-      id: '/_auth/recipes'
+    '/_auth/recipes/': {
+      id: '/_auth/recipes/'
       path: '/recipes'
       fullPath: '/recipes'
-      preLoaderRoute: typeof AuthRecipesRouteImport
+      preLoaderRoute: typeof AuthRecipesIndexRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/products': {
-      id: '/_auth/products'
+    '/_auth/products/': {
+      id: '/_auth/products/'
       path: '/products'
       fullPath: '/products'
-      preLoaderRoute: typeof AuthProductsRouteImport
+      preLoaderRoute: typeof AuthProductsIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/products/create': {
+      id: '/_auth/products/create'
+      path: '/products/create'
+      fullPath: '/products/create'
+      preLoaderRoute: typeof AuthProductsCreateRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/products/$productId/edit': {
+      id: '/_auth/products/$productId/edit'
+      path: '/products/$productId/edit'
+      fullPath: '/products/$productId/edit'
+      preLoaderRoute: typeof AuthProductsProductIdEditRouteImport
       parentRoute: typeof AuthRoute
     }
   }
 }
 
 interface AuthRouteChildren {
-  AuthProductsRoute: typeof AuthProductsRoute
-  AuthRecipesRoute: typeof AuthRecipesRoute
+  AuthProductsCreateRoute: typeof AuthProductsCreateRoute
+  AuthProductsIndexRoute: typeof AuthProductsIndexRoute
+  AuthRecipesIndexRoute: typeof AuthRecipesIndexRoute
+  AuthProductsProductIdEditRoute: typeof AuthProductsProductIdEditRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthProductsRoute: AuthProductsRoute,
-  AuthRecipesRoute: AuthRecipesRoute,
+  AuthProductsCreateRoute: AuthProductsCreateRoute,
+  AuthProductsIndexRoute: AuthProductsIndexRoute,
+  AuthRecipesIndexRoute: AuthRecipesIndexRoute,
+  AuthProductsProductIdEditRoute: AuthProductsProductIdEditRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

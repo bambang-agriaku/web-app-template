@@ -5,10 +5,15 @@ import { Table } from "./table";
 import { SearchField } from "@/components/ui/inputs";
 import { DefaultPage } from "@/config/table";
 import { useListQueryParams } from "../hooks/use-list-query-params";
+import { useNavigate } from "@tanstack/react-router";
 
 export const ProductsList = () => {
+  const navigate = useNavigate();
   const { queryParams, setQueryParams } = useListQueryParams();
-  const goToCreateProduct = () => {};
+
+  const goToCreateProduct = () => {
+    navigate({ to: "/products/create" });
+  };
 
   return (
     <Stack spacing={4.5}>
