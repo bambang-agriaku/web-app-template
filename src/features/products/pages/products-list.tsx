@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Button, Stack, Typography } from "@mui/material";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import { Table } from "./table";
+import { Table } from "../components/table";
 import { SearchField } from "@/components/ui/inputs";
 import { DefaultPage } from "@/config/table";
 import { useListQueryParams } from "../hooks/use-list-query-params";

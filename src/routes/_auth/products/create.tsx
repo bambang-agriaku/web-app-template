@@ -1,4 +1,4 @@
-import { CreateProduct } from "@/features/products/components/create-product";
+import { CreateProduct } from "@/features/products/pages/create-product";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth/products/create")({
